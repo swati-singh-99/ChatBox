@@ -1,0 +1,9 @@
+export const host = "http://localhost:7700";
+export const loginRoute = `${host}/api/auth/login`;
+export const registerRoute = `${host}/api/auth/signup`;
+export const logoutRoute = `${host}/api/auth/logout`;
+export const allUsersRoute = `${host}/api/auth/allusers`;
+export const sendMessageRoute = `${host}/api/messages/addmsg`;
+export const recieveMessageRoute = `${host}/api/messages/getmsg`;
+export const profileRoute = `${host}/api/auth/profile`;
+export const deleteMessageRoute = `${host}/api/messages/deletemessage`;
