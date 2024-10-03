@@ -20,7 +20,13 @@ app.get("/ping", (_req, res) => {
     return res.json({ msg: "Ping Successful" });
   });
 
-app.use(cors());
+  const corsOptions = {
+    origin: "https://chatbox-t9tp.onrender.com", 
+    credentials: true, 
+  };
+  app.use(cors(corsOptions));
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

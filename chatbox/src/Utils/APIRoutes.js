@@ -1,4 +1,4 @@
-export const host = "http://localhost:7700";
+export const host = "https://chatbox-t9tp.onrender.com";
 export const loginRoute = `${host}/api/auth/login`;
 export const registerRoute = `${host}/api/auth/signup`;
 export const logoutRoute = `${host}/api/auth/logout`;
