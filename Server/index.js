@@ -21,7 +21,7 @@ app.get("/ping", (_req, res) => {
   });
 
   const corsOptions = {
-    origin: "https://chatbox-t9tp.onrender.com", 
+    origin: "https://chatbox-wln7.onrender.com", 
     credentials: true, 
   };
   app.use(cors(corsOptions));
