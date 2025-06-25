@@ -9,7 +9,7 @@ import { Buffer } from "buffer";
 import { profileRoute } from "../Utils/APIRoutes";
 
 export default function Profile() {
-  const api = `https://api.multiavatar.com/4645646`;
+  const api = `https://api.multiavatar.com`;
   const navigate = useNavigate();
   const [avatars, setAvatars] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -61,7 +61,9 @@ export default function Profile() {
     const data = [];
     for (let i = 0; i < 4; i++) {
       try {
-        const image = await axios.get(`${api}/${Math.round(Math.random() * 1000)}`);
+        const image = await axios.get(`${api}/${Math.round(Math.random() * 1000)}`, {
+  headers: { Accept: "image/svg+xml" },
+});
         const buffer = new Buffer(image.data);
         data.push(buffer.toString("base64"));
         
