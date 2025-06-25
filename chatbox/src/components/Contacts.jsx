@@ -56,6 +56,9 @@ export default function Contacts({ contacts, changeChat }) {
             })}
           </div>
           <div className="current-user">
+              <span className="label">
+                  You <span className="arrow">→</span>
+              </span>
             <div className="avatar">
               <img
                 src={`data:image/svg+xml;base64,${currentUserImage}`}
@@ -165,6 +168,31 @@ const Container = styled.div`
         border: 2px solid #9a86f3; /* Border around current user's avatar */
       }
     }
+
+    .label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background-color: #f0edff;
+    color: #6b4eff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    box-shadow: inset 0 0 2px #dedcff;
+
+    .arrow {
+      font-size: 1rem;
+      font-weight: bold;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    &:hover .arrow {
+      transform: translateX(3px);
+    }
+  }
 
     .username {
       h2 {
