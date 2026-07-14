@@ -30,42 +30,6 @@ export default function Contacts({ contacts, changeChat }) {
   );
 
   return (
-<<<<<<< HEAD
-    <>
-      {currentUserImage && currentUserName && (
-        <Container>
-          <div className="brand">
-            <img src={Logo} alt="logo" />
-            <h3>CHATBOX</h3>
-          </div>
-          <div className="contacts">
-            {contacts.map((contact, index) => {
-              return (
-                <div
-                  key={contact._id}
-                  className={`contact ${
-                    index === currentSelected ? "selected" : ""
-                  }`}
-                  onClick={() => changeCurrentChat(index, contact)}
-                >
-                  <div className="avatar">
-                    <img
-                      src={`data:image/svg+xml;base64,${contact.avatarImage}`}
-                      alt=""
-                    />
-                  </div>
-                  <div className="username">
-                    <h3>{contact.username}</h3>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <div className="current-user">
-              <span className="label">
-                  You <span className="arrow">→</span>
-              </span>
-=======
     <Container>
       {/* Header */}
 
@@ -101,7 +65,6 @@ export default function Contacts({ contacts, changeChat }) {
             className={`contact ${currentSelected === index ? "selected" : ""}`}
             onClick={() => changeCurrentChat(index, contact)}
           >
->>>>>>> fe6d403 (updated UI)
             <div className="avatar">
               <img
                 src={`data:image/svg+xml;base64,${contact.avatarImage}`}

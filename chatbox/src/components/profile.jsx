@@ -8,10 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { profileRoute } from "../Utils/APIRoutes";
 
 export default function Profile() {
-<<<<<<< HEAD
-  const api = `https://api.dicebear.com/7.x/micah/svg?seed=emma`;
-=======
->>>>>>> fe6d403 (updated UI)
   const navigate = useNavigate();
   const [avatars, setAvatars] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
