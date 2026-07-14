@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev":"nodemon Server/index.js",
     "build":"npm install && npm install --prefix chatbox && npm run build --prefix chatbox",
-    "start": "nodemon Server/index.js"
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",

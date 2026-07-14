@@ -1,0 +1,9 @@
+{
+  "name": "chatbox-fullstack",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npm install --prefix Server && npm install --prefix chatbox && npm run build --prefix chatbox",
+    "start": "npm start --prefix Server"
+  }
+}
