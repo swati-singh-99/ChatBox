@@ -5,11 +5,13 @@ import loader from "../assets/loader.gif";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-import { Buffer } from "buffer";
 import { profileRoute } from "../Utils/APIRoutes";
 
 export default function Profile() {
+<<<<<<< HEAD
   const api = `https://api.dicebear.com/7.x/micah/svg?seed=emma`;
+=======
+>>>>>>> fe6d403 (updated UI)
   const navigate = useNavigate();
   const [avatars, setAvatars] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -58,30 +60,23 @@ export default function Profile() {
   };
 
   const fetchAvatars = async () => {
-    const data = [];
-    for (let i = 0; i < 4; i++) {
-      try {
-        const image = await axios.get(`${api}/${Math.round(Math.random() * 1000)}`);
-        const buffer = new Buffer(image.data);
-        data.push(buffer.toString("base64"));
-        
-        // Add a delay of 1 second between requests
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      } catch (error) {
-        if (error.response && error.response.status === 429) {
-          toast.error("Too many requests. Please try again later.", toastOptions);
-          return; 
-        }
-        console.error("Error fetching avatar:", error);
-      }
-    }
-    setAvatars(data);
-    setIsLoading(false);
-  };
+  const data = [];
+
+  for (let i = 0; i < 4; i++) {
+    const seed = Math.random().toString(36).substring(7);
+
+    data.push(
+      `https://api.dicebear.com/9.x/adventurer/svg?seed=${seed}`
+    );
+  }
+
+  setAvatars(data);
+  setIsLoading(false);
+};
 
   useEffect(() => {
     fetchAvatars();
-  }, [api]);
+  }, []);
 
   return (
     <>
@@ -102,7 +97,7 @@ export default function Profile() {
                   key={index}
                 >
                   <img
-                    src={`data:image/svg+xml;base64,${avatar}`}
+                    src={avatar}
                     alt="avatar"
                     onClick={() => setSelectedAvatar(index)}
                   />

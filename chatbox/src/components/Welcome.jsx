@@ -29,47 +29,92 @@ export default function Welcome() {
 }
 
 const Container = styled.div`
+  width: 100%;
+  height: 100%;
+  padding: 1.5rem;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  background: #080420;
   color: white;
-  flex-direction: column;
-  background-color: #080420;
-  img {
-    height: 20rem;
+  text-align: center;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  .robot {
+    width: min(320px, 70%);
+    height: auto;
+    margin-bottom: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
   }
+
+  h1 {
+    margin: 0;
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1.3;
+    word-break: break-word;
+  }
+
   span {
     color: #4e0eff;
   }
 
-  img {
-    height: 20rem;
-    margin-bottom: 2rem; /* Add space below the image */
-    border-radius: 10%; /* Rounded corners for the image */
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); /* Subtle shadow */
-  }
-
-  h1 {
-    font-size: 2.5rem; /* Larger font size for the main welcome message */
-    margin: 0; /* Remove default margin */
-  }
-
-  span {
-    color: #4e0eff; /* Highlight username */
-  }
-
   h3 {
-    font-size: 1.2rem; /* Slightly larger font size for instructions */
-    margin-top: 1rem; /* Add space above the instruction text */
-    color: #e0e0e0; /* Light gray for better contrast */
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    color: #d1d5db;
+    font-weight: 400;
   }
 
-  @media screen and (max-width: 720px) {
-    h1 {
-      font-size: 2rem; /* Responsive font size */
+  /* Tablet */
+  @media (max-width: 1024px) {
+    .robot {
+      width: 400px;
     }
+
+    h1 {
+      font-size: 3rem;
+    }
+
     h3 {
-      font-size: 1rem; /* Responsive font size for instructions */
+      font-size: 2rem;
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    padding: 1rem;
+
+    .robot {
+      width: 300px;
+      margin-bottom: 1.2rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    h3 {
+      font-size: 0.9rem;
+      padding: 0 0.5rem;
+    }
+  }
+
+  /* Very Small Phones */
+  @media (max-width: 480px) {
+    .robot {
+      width: 200px;
+    }
+
+    h1 {
+      font-size: 1.2rem;
+    }
+
+    h3 {
+      font-size: 0.8rem;
     }
   }
 `;

@@ -24,14 +24,17 @@ export default function Register() {
   });
 
   useEffect(() => {
-    if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
-      navigate("/");
-    }
-  }, []);
+  if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
+    navigate("/");
+  }
+}, [navigate]);
 
-  const handleChange = (event) => {
-    setValues({ ...values, [event.target.name]: event.target.value });
-  };
+  const handleChange = ({ target }) => {
+  setValues((prev) => ({
+    ...prev,
+    [target.name]: target.value,
+  }));
+};
 
   const handleValidation = () => {
     const { username, email, password, confirmPassword } = values;
@@ -62,27 +65,27 @@ export default function Register() {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (handleValidation()) {
-      const { email, username, password } = values;
-      const { data } = await axios.post(registerRoute, {
-        username,
-        email,
-        password,
-      });
+  event.preventDefault();
+  if (handleValidation()) {
+    const { email, username, password } = values;
+    const { data } = await axios.post(registerRoute, {
+      username,
+      email,
+      password,
+    });
 
-      if (data.status === false) {
-        toast.error(data.msg, toastOptions);
-      }
-      if (data.status === true) {
-        localStorage.setItem(
-          process.env.REACT_APP_LOCALHOST_KEY,
-          JSON.stringify(data.user)
-        );
-        navigate("/");
-      }
+    if (data.status === false) {
+      toast.error(data.msg, toastOptions);
     }
-  };
+    if (data.status === true) {
+      localStorage.setItem(
+        process.env.REACT_APP_LOCALHOST_KEY,
+        JSON.stringify(data.user)
+      );
+      navigate("/");
+    }
+  }
+};
 
   return (
     <>
@@ -116,6 +119,7 @@ export default function Register() {
             name="confirmPassword"
             onChange={(e) => handleChange(e)}
           />
+         
           <button type="submit">Register</button>
           <span>
             Already have an account ? <Link to="/login">Login</Link>

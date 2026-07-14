@@ -16,23 +16,22 @@ export default function ChatContainer({ currentChat, socket }) {
       const storedData = await JSON.parse(
         localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
       );
-      if (storedData && currentChat) {
-        try {
-          const response = await axios.post(recieveMessageRoute, {
-            from: storedData._id,
-            to: currentChat._id,
-          });
-
-          // Log response to see if _id is present
-          console.log("Messages received:", response.data);
-          setMessages(response.data);
-        } catch (error) {
-          console.error("Failed to fetch messages:", error);
-        }
+      if (storedData) {
+        const response = await axios.post(recieveMessageRoute, {
+          from: storedData._id,
+          to: currentChat._id,
+        });
+        
+        // Log response to see if _id is present
+        console.log(response.data); // Check the structure of the response
+        setMessages(response.data);
       }
     };
+    
 
-    fetchMessages();
+    if (currentChat) {
+      fetchMessages();
+    }
   }, [currentChat]);
 
   const handleSendMsg = async (msg) => {
@@ -40,44 +39,31 @@ export default function ChatContainer({ currentChat, socket }) {
       localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
     );
     if (storedData) {
-      try {
-        // Emit message to socket
-        socket.current.emit("send-msg", {
-          to: currentChat._id,
-          from: storedData._id,
-          msg,
-        });
+      socket.current.emit("send-msg", {
+        to: currentChat._id,
+        from: storedData._id,
+        msg,
+      });
+      const { data } = await axios.post(sendMessageRoute, {
+        from: storedData._id,
+        to: currentChat._id,
+        message: msg,
+      });
 
-        // Send message to the server
-        const response = await axios.post(sendMessageRoute, {
-          from: storedData._id,
-          to: currentChat._id,
-          message: msg,
-        });
-
-        console.log("Message sent response:", response.data); // Log response for debugging
-
-        // Update messages state
-        setMessages((prev) => [...prev, { fromSelf: true, message: msg }]);
-      } catch (error) {
-        console.error("Error sending message:", error.response?.data || error.message);
-      }
+      setMessages((prev) => [...prev, data]);
     }
-};
+  };
 
-
-const handleDeleteMsg = async (messageId) => {
-  try {
-    console.log("Deleting message with ID:", messageId);
-    const response = await axios.delete(`${deleteMessageRoute}/${messageId}`);
-    console.log("Message deleted response:", response.data); // Log response for debugging
-    setMessages((prevMessages) => prevMessages.filter(msg => msg._id !== messageId));
-    alert("Message deleted successfully.");
-  } catch (error) {
-    console.error("Failed to delete message:", error.response?.data || error.message);
-    alert("Failed to delete message.");
-  }
-};
+  const handleDeleteMsg = async (messageId) => {
+    
+    try {
+      await axios.delete(`${deleteMessageRoute}/${messageId}`);
+      console.log("donee")
+      setMessages((prevMessages) => prevMessages.filter(msg => msg._id !== messageId));
+    } catch (error) {
+      console.error("Failed to delete message:", error);
+    }
+  };
 
   useEffect(() => {
     if (socket.current) {
@@ -115,8 +101,10 @@ const handleDeleteMsg = async (messageId) => {
           </div>
           <div className="chat-messages">
             {messages.map((message) => (
-              <div ref={scrollRef} key={message._id}> {/* Use message._id for the key */}
-                <div className={`message ${message.fromSelf ? "sended" : "recieved"}`}>
+              <div ref={scrollRef} key={message._id}> {/* Use message._id instead of uuidv4() */}
+                <div
+                  className={`message ${message.fromSelf ? "sended" : "recieved"}`}
+                >
                   <div className="content">
                     <p>{message.message}</p>
                     {/* Add delete icon */}
@@ -140,145 +128,155 @@ const handleDeleteMsg = async (messageId) => {
   );
 }
 
+
 const Container = styled.div`
   display: grid;
-  grid-template-rows: 15% 75% 10%;
-  gap: 0.1rem;
+  grid-template-rows: 75px 1fr 80px;
+  height: 100%;
+  background: #f3f4f6;
   overflow: hidden;
 
-  @media screen and (max-width: 720px) {
-    grid-template-rows: 10% 80% 10%;
-  }
+  /* HEADER */
 
   .chat-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 2rem 2rem;
-    margin: 0.5rem 0;
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-    color: white;
-    border-bottom: 2px solid #ffffff50;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    z-index: 9;
-
-    @media screen and (max-width: 720px) {
-      padding: 1.5rem 1.5rem;
-    }
+    padding: 0 1.5rem;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
 
     .user-details {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 1rem;
 
       .avatar {
         img {
-          height: 2rem;
-          width: 2rem;
+          width: 50px;
+          height: 50px;
           border-radius: 50%;
-          border: 2px solid white;
+          object-fit: cover;
+          border: 2px solid #2563eb;
         }
       }
 
       .username {
-        h3 {
-          color: white;
-          font-size: 1.2rem;
-          font-weight: 600;
+        display: flex;
+        flex-direction: column;
 
-          @media screen and (max-width: 720px) {
-            font-size: 1rem;
-          }
+        h3 {
+          margin: 0;
+          color: #111827;
+          font-size: 1.1rem;
+          font-weight: 600;
+        }
+
+        span {
+          color: #10b981;
+          font-size: .8rem;
         }
       }
     }
   }
 
+  /* MESSAGES */
+
   .chat-messages {
-    padding: 0.5rem 1rem;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: .8rem;
     overflow-y: auto;
+    background: #eef2ff;
 
     &::-webkit-scrollbar {
-      width: 0.2rem;
-      &-thumb {
-        background-color: #ffffff39;
-        border-radius: 1rem;
-      }
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 20px;
     }
 
     .message {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
 
       .content {
-        max-width: 90%; /* Increased to avoid overflow */
-        overflow-wrap: break-word; /* Break long words */
-        word-wrap: break-word;
-        word-break: break-word; /* Break long words */
-        white-space: normal; /* Ensure normal word wrapping */
-        padding: 0.5rem;
-        font-size: 0.9rem;
-        border-radius: 1rem;
+        max-width: 65%;
+        padding: .8rem 1rem;
+        border-radius: 18px;
+        position: relative;
+        font-size: .95rem;
+        line-height: 1.5;
+        word-break: break-word;
         display: flex;
         align-items: center;
-        position: relative; /* Required for the delete icon positioning */
+        gap: .6rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,.08);
 
-        @media screen and (max-width: 720px) {
-          max-width: 85%; /* Adjusted for smaller screens */
-          font-size: 0.85rem;
-        }
-
-        /* Show delete icon on hover */
-        &:hover .delete-icon {
-          display: inline; /* Show the delete icon */
+        p {
+          margin: 0;
         }
       }
 
       .delete-icon {
-        display: none; /* Hide by default */
-        font-size: 0.6rem; 
+        opacity: 0;
         cursor: pointer;
-        margin-left: 0.5rem;
-        transition: color 0.3s ease;
-        flex-shrink: 0; /* Prevents icon from shrinking if the message is long */
-        align-self: center; 
+        color: #fea8a8;
+        transition: .2s;
+        font-size: .75rem;
+      }
 
-        @media screen and (max-width: 720px) {
-          font-size: 0.6rem; /* Keep it the same for mobile, adjust if necessary */
-        }
-      }  
+      .content:hover .delete-icon {
+        opacity: 1;
+      }
     }
 
     .sended {
       justify-content: flex-end;
+
       .content {
-        background-color: #4caf50;
+        background: #2563eb;
         color: white;
-        border: 1px solid #388e3c;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-        word-break: break-word;
-        white-space: normal;
-        overflow-y: auto;
+        border-bottom-right-radius: 6px;
       }
     }
 
     .recieved {
       justify-content: flex-start;
+
       .content {
-        background-color: #2196f3;
-        color: white;
-        border: 1px solid #1976d2;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-        word-break: break-word;
-        white-space: normal;
+        background: white;
+        color: #111827;
+        border-bottom-left-radius: 6px;
+      }
+    }
+  }
+
+  @media (max-width:768px) {
+    grid-template-rows: 70px 1fr 75px;
+
+    .chat-header {
+      padding: 0 1rem;
+
+      .avatar img {
+        width: 42px;
+        height: 42px;
+      }
+
+      .username h3 {
+        font-size: 1rem;
+      }
+    }
+
+    .chat-messages {
+      padding: .8rem;
+
+      .message .content {
+        max-width: 80%;
+        font-size: .9rem;
       }
     }
   }

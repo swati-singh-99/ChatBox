@@ -79,54 +79,58 @@ export default function Chat() {
 const Container = styled.div`
   height: 100vh;
   width: 100vw;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #f0f2f5; /* Lighter background for the page */
+  background: #f0f2f5;
+  overflow: hidden;
 
   .container {
-    height: 100vh;
-    width: 100vw;
-    background-color: #ffffff; /* White background for the chat container */
+    height: 100%;
+    width: 100%;
     display: grid;
-    grid-template-columns: 25% 75%;
-    border-radius: 20px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Softer shadow */
+    grid-template-columns: 28% 72%;
+    background: #fff;
     overflow: hidden;
-    padding: 20px; /* Add some padding for a neat layout */
+  }
 
-    @media screen and (min-width: 720px) and (max-width: 1080px) {
-      grid-template-columns: 35% 65%;
-    }
-
-    @media screen and (max-width: 720px) {
-      grid-template-columns: 100%;
+  /* Desktop */
+  @media (min-width: 1200px) {
+    .container {
+      grid-template-columns: 25% 75%;
     }
   }
 
-  /* Hide scrollbar */
+  /* Laptop */
+  @media (max-width: 1199px) {
+    .container {
+      grid-template-columns: 30% 70%;
+    }
+  }
+
+  /* Tablet */
+  @media (max-width: 992px) {
+    .container {
+      grid-template-columns: 35% 65%;
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .container {
+      grid-template-columns: 38% 62%;
+    }
+  }
+
+  /* Small Mobile */
+  @media (max-width: 480px) {
+    .container {
+      grid-template-columns: 40% 60%;
+    }
+  }
+
   .container::-webkit-scrollbar {
     display: none;
   }
 
-  
   .container {
     scrollbar-width: none;
-  }
-
-  
-  .contacts {
-    background-color: #f7f8fc; /* Light gray for the contacts panel */
-    border-right: 1px solid #e0e0e0; /* Subtle border for separation */
-  }
-
-  .chat-area {
-    background-color: #ffffff;
-  }
-
-  /* Adding hover effect on contacts */
-  .contacts .contact-item:hover {
-    background-color: #e0e7ff; /* Light blue on hover */
-    cursor: pointer;
   }
 `;
