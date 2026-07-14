@@ -33,9 +33,10 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
-app.use(express.static(path.join(_dirname, "/chatbox/build")));
-app.get('*', (req,res)=>{
-  res.sendFile(path.resolve(_dirname, "chatbox", "build", "index.html"));
+app.use(express.static(path.join(__dirname, "../chatbox/build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../chatbox/build", "index.html"));
 });
 
 const server = app.listen(port, ()=>{
