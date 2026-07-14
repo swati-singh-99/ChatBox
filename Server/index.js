@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const dotenv = require("dotenv");
+require("dotenv").config();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
@@ -8,10 +9,8 @@ const socket = require("socket.io");
 const authRoutes = require("./routers/userRoute");
 const messageRoutes = require("./routers/messages");
 
-require("dotenv").config();
-
 const app=express();
-const port=process.env.PORT || 7700;
+const port=process.env.PORT;
 const DBurl=process.env.MONGO_URL;
 
 const _dirname = path.resolve();
@@ -21,7 +20,7 @@ app.get("/ping", (_req, res) => {
   });
 
   const corsOptions = {
-    origin: "https://chatbox-wln7.onrender.com", 
+    origin: process.env.ORIGIN, 
     credentials: true, 
   };
   app.use(cors(corsOptions));
